@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>tetris</title>
+</head>
+<body>
+  <canvas id="can"></canvas>
+<script>
+  // ブロック一つのサイズ
+  const Block_Size = 30;
+  // テトロミノのサイズ
+  const Tetro_Size =4;
+  // getElementByIdでcanのElementを取得
+  let can = document.getElementById("can");
+  let con = can.getContext("2d");
+
+// Tetrisのブロックの形を二次元配列で表現
+  let tetro = [
+    [0, 0, 0, 0],
+    [1, 1, 0, 0],
+    [0, 1, 1, 0],
+    [0, 0, 0, 0]
+  ];
+// for文でループさせる
+  for(let y=0; y<Tetro_Size; y++)
+  {
+    for(let x=0; x<Tetro_Size; x++)
+    {
+      if(tetro[y][x])
+      {
+        let px = x * Block_Size;
+        let py = y * Block_Size;
+        con.fillStyle="red";
+        con.fillRect(px,py, Block_Size, Block_Size);
+        con.strokerStyle="black"
+        con.strokeRect(px,py, Block_Size ,Block_Size);
+      }
+    }
+  }
+
+</script>
+</body>
+</html>
