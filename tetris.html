@@ -25,20 +25,79 @@
   can.width = SCREEN_W;
   can.height = SCREEN_H;
   can.style.border = "4px solid #555";
-// Tetrisのブロックの形を二次元配列で表現
-let tetro = [
-[0, 0, 0, 0],
-[1, 1, 0, 0],
-[0, 1, 1, 0],
-[0, 0, 0, 0]
+
+const Tetro_Colors = [
+  "#000", //0空
+  "#6CF", //1水色
+  "#F92", //2オレンジ
+  "#66F", //3青
+  "#C5C", //4紫
+  "#FD2", //5黄
+  "#F44", //6赤
+  "#5B5"  //7緑
 ];
 
+const Tetro_Types = [
+[], // 0.空
+[//1.I
+  [0, 0, 0, 0],
+  [1, 1, 1, 1],
+  [0, 0, 0, 0],
+  [0, 0, 0, 0]
+],
+[//2.L
+  [0, 1, 0, 0],
+  [0, 1, 0, 0],
+  [0, 1, 1, 0],
+  [0, 0, 0, 0]
+],
+[//3.J
+  [0, 0, 1, 0],
+  [0, 0, 1, 0],
+  [0, 1, 1, 0],
+  [0, 0, 0, 0]
+],
+[//4.T
+  [0, 1, 0, 0],
+  [0, 1, 1, 0],
+  [0, 1, 0, 0],
+  [0, 0, 0, 0]
+],
+[//5.O
+  [0, 0, 0, 0],
+  [0, 1, 1, 0],
+  [0, 1, 1, 0],
+  [0, 0, 0, 0]
+],
+[//6.Z
+  [0, 0, 0, 0],
+  [1, 1, 0, 0],
+  [0, 1, 1, 0],
+  [0, 0, 0, 0]
+],
+[//7.S
+  [0, 0, 0, 0],
+  [0, 1, 1, 0],
+  [1, 1, 0, 0],
+  [0, 0, 0, 0]
+],];
+
+const Start_X = FIELD_COL/2 - Tetro_Size/2;
+const Start_Y = 0;
+
+// テトロミノ本体
+let tetro;
+
 // テトロミノの座標
-let tetro_x =0;
-let tetro_y =0;
+let tetro_x = Start_X;
+let tetro_y = Start_Y;
+//テトロミノの形
+let tetro_t;
 
 //フィールドの中身
 let field = [];
+tetro_t = Math.floor(Math.random()*(Tetro_Types.length-1))+1;
+tetro = Tetro_Types[tetro_t];
 // 初期化
 function init(){
   for(let y=0; y<FIELD_ROW; y++){
@@ -53,10 +112,10 @@ drawAll();
 
 setInterval(dropTetro, GameSpeed);
 
-function drawBlock(x,y){
+function drawBlock(x,y,c){
   let px = x * Block_Size;
   let py = y * Block_Size;
-  con.fillStyle="red";
+  con.fillStyle= Tetro_Colors[c];
   con.fillRect(px,py, Block_Size, Block_Size);
   con.strokeStyle="black"
   con.strokeRect(px,py, Block_Size ,Block_Size);
@@ -69,14 +128,14 @@ con.clearRect(0,0, SCREEN_W, SCREEN_H);
 for(let y=0; y<FIELD_ROW; y++){
   for(let x=0; x<FIELD_COL; x++){
     if(field[y][x]){
-      drawBlock (x,y);
+      drawBlock (x,y, field[y][x]);
     }
   }
 }
 for(let y=0; y<Tetro_Size; y++){
   for(let x=0; x<Tetro_Size; x++){
     if(tetro[y][x]){
-      drawBlock(tetro_x+x, tetro_y+y);
+      drawBlock(tetro_x+x, tetro_y+y, tetro_t);
     }
   }
 }
@@ -117,7 +176,7 @@ function fixTetro(){
   for(let y=0; y<Tetro_Size; y++){
     for(let x=0; x<Tetro_Size; x++){
       if (tetro[y][x]) {
-        field[tetro_y + y][tetro_x + x] = 1;
+        field[tetro_y + y][tetro_x + x] = tetro_t;
       }
     }
   }
@@ -127,8 +186,10 @@ function dropTetro(){
   if(checkMove(0, 1))tetro_y++;
   else{
     fixTetro();
-    tetro_x = 0
-    tetro_y = 0
+    tetro_t = Math.floor(Math.random()*(Tetro_Types.length-1))+1;
+    tetro = Tetro_Types[tetro_t];
+    tetro_x = Start_X;
+    tetro_y = Start_Y;
   }
   drawAll();
 }
