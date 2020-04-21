@@ -78,12 +78,13 @@ for(let y=0; y<Tetro_Size; y++){
 }
 }
 // ブロックの衝突判定
-function checkMove(mx,my){
+function checkMove(mx,my,ntetro){
+  if (ntetro == undefined) ntetro = tetro;
   for(let y=0; y<Tetro_Size; y++){
     for(let x=0; x<Tetro_Size; x++){
       let nx = tetro_x + mx + x;
       let ny = tetro_y + my + y;
-      if(tetro[y][x]){
+      if(ntetro[y][x]){
         if (field[ny][nx] ||
           ny < 0 ||
           nx < 0 ||
@@ -95,6 +96,17 @@ function checkMove(mx,my){
     }
   }
   return true;
+}
+//tetroの回転
+function rotate(){
+  let ntetro = [];
+  for(let y=0; y<Tetro_Size; y++){
+    ntetro[y]=[];
+    for(let x=0; x<Tetro_Size; x++){
+      ntetro[y][x] = tetro[Tetro_Size-x-1][y];
+    }
+  }
+  return ntetro;
 }
 
 document.onkeydown = function(e){
@@ -113,6 +125,8 @@ document.onkeydown = function(e){
        if(checkMove(0, 1))tetro_y++;
        break;
        case 32:// スペース
+       let ntetro = rotate();
+       if(checkMove(0, 0, ntetro)) tetro = ntetro;
        break;
      }
      drawAll();
