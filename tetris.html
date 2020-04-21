@@ -35,44 +35,68 @@ let tetro = [
 let tetro_x =0;
 let tetro_y =0;
 
-drawTetro();
-
-function drawTetro(){
-  con.clearRect(0,0, SCREEN_W, SCREEN_H);
-// for文でループさせる
-  for(let y=0; y<Tetro_Size; y++){
-    for(let x=0; x<Tetro_Size; x++){
-      if(tetro[y][x]){
-        let px = (tetro_x + x) * Block_Size;
-        let py = (tetro_y + y) * Block_Size;
-        con.fillStyle="red";
-        con.fillRect(px,py, Block_Size, Block_Size);
-        con.strokerStyle="black"
-        con.strokeRect(px,py, Block_Size ,Block_Size);
-      }
+//フィールドの中身
+let field = [];
+// 初期化
+function init(){
+  for(let y=0; y<FIELD_ROW; y++){
+    field[y] = [];
+    for(let x=0; x<FIELD_COL; x++){
+      field[y][x] = 0;
     }
   }
+}
+init();
+drawAll();
+
+function drawBlock(x,y){
+  let px = x * Block_Size;
+  let py = y * Block_Size;
+  con.fillStyle="red";
+  con.fillRect(px,py, Block_Size, Block_Size);
+  con.strokeStyle="black"
+  con.strokeRect(px,py, Block_Size ,Block_Size);
+}
+
+function drawAll(){
+//全部描画する
+con.clearRect(0,0, SCREEN_W, SCREEN_H);
+// for文でループさせる
+for(let y=0; y<FIELD_ROW; y++){
+  for(let x=0; x<FIELD_COL; x++){
+    if(field[y][x]){
+      drawBlock (x,y);
+    }
+  }
+}
+for(let y=0; y<Tetro_Size; y++){
+  for(let x=0; x<Tetro_Size; x++){
+    if(tetro[y][x]){
+      drawBlock(tetro_x+x, tetro_y+y);
+    }
+  }
+}
 }
 
 document.onkeydown = function(e){
   // キーボードが押された時の処理
   switch(e.keyCode){
        case 37:// 左
-           tetro_x--;
+       tetro_x--;
        break;
        case 38:// 上
-           tetro_y--;
+       tetro_y--;
        break;
        case 39:// 右
-           tetro_x++;
+       tetro_x++;
        break;
        case 40:// 下
-           tetro_y++;
+       tetro_y++;
        break;
        case 32:// スペース
        break;
      }
-     drawTetro();
+     drawAll();
    }
 
  </script>
