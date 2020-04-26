@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>function</title>
+</head>
+<body>
+  <script>
+    function BMI(name, height, weight){
+      let BMI = calcBMI(height, weight);
+      document.write(name + "おはよう<BR>");
+      document.write("身長" + height + "cm<BR>");
+      document.write("体重" + weight + "kg<BR>");
+      document.write("BMIは" + BMI + "<BR>");
+    }
+
+    function calcBMI(height, weight){
+      return weight / (height / 100)**2;
+    }
+
+    BMI("山根", 180, 54);
+    BMI("田中", 190, 100);
+
+  </script>
+</body>
+</html>
